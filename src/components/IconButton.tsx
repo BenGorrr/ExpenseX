@@ -1,6 +1,8 @@
+import { ReactNode } from "react";
+import { ViewStyle } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-const IconButton = ({ icon, onPress, style }) => {
+const IconButton = ({ icon, onPress, style }: { icon: ReactNode, onPress(): void, style: ViewStyle }) => {
 	return (
 		<TouchableOpacity
 			style={{

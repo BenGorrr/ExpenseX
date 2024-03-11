@@ -1,10 +1,9 @@
-import { Text, TouchableOpacity, View } from "react-native";
-import { useTheme } from "@react-navigation/native";
-import { Feather } from "@expo/vector-icons";
+import { Text, TouchableOpacity } from "react-native";
 import { Surface } from "react-native-paper";
+import { colors } from "../../../theme/colors";
 
-const BalanceButton = ({ onPress, balance }) => {
-	const { colors } = useTheme();
+const BalanceButton = ({ onPress, balance }: { onPress(): void, balance: number }) => {
+
 	const displayBalance =
 		balance >= 0 ? "RM " + balance : "(RM " + balance * -1 + ")";
 

@@ -1,16 +1,16 @@
 import { TouchableOpacity, View } from "react-native";
 import { useTheme } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
+import { colors } from "../../../theme/colors";
 
-const IncomeButton = ({ onPress, size = 100 }) => {
-	const { colors } = useTheme();
+const ExpenseButton = ({ onPress, size = 100 }: { onPress(): void, size?: number }) => {
 
 	return (
 		<TouchableOpacity
 			style={{
 				padding: 5,
 				borderRadius: 999,
-				backgroundColor: colors.primary,
+				backgroundColor: colors.error,
 				alignSelf: "center",
 			}}
 			onPress={onPress}
@@ -25,10 +25,10 @@ const IncomeButton = ({ onPress, size = 100 }) => {
 					alignItems: "center",
 				}}
 			>
-				<Feather name="plus" size={size * 0.4} color={colors.primary} />
+				<Feather name="minus" size={size * 0.4} color={colors.error} />
 			</View>
 		</TouchableOpacity>
 	);
 };
 
-export default IncomeButton;
+export default ExpenseButton;

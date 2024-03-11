@@ -1,3 +1,4 @@
+import { Feather, FontAwesome } from "@expo/vector-icons";
 import {
 	DefaultTheme,
 	NavigationContainer,
@@ -5,112 +6,131 @@ import {
 } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { StatusBar } from "expo-status-bar";
-import { Button, Text, View } from "react-native";
-import { Feather } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
+import { Text, View } from "react-native";
 
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import { Provider } from "react-native-paper";
+import IconButton from "../components/IconButton";
 import Home from "../screens/home/Home";
 import { colors } from "../theme/colors";
-import IconButton from "../components/IconButton";
-import { Provider } from "react-native-paper";
-import { createDrawerNavigator } from "@react-navigation/drawer";
+import ExpenseEntry from "../screens/entry/ExpenseEntry";
 
-const Stack = createStackNavigator();
+const HomeStackNav = createStackNavigator();
 
 function HomeStack({ navigation }) {
 	const { colors } = useTheme();
 
 	return (
-		<Stack.Navigator
+		<HomeStackNav.Navigator
 			initialRouteName="Home"
 			screenOptions={{
-				headerStyle: {
-					backgroundColor: colors.primary,
-				},
-				headerTintColor: "#fff",
-				headerTitle: "ExpenseX",
-				headerRightContainerStyle: {
-					paddingEnd: "2%",
-				},
-				headerLeft: () => (
-					<View style={{ flexDirection: "row", marginStart: "6%" }}>
-						<IconButton
-							icon={
-								<Feather name="filter" size={24} color="#fff" />
-							}
-							onPress={() =>
-								navigation.getParent("LeftDrawer").openDrawer()
-							}
-							style={{ marginHorizontal: "6%" }}
-						/>
-					</View>
-				),
-				headerRight: () => (
-					<View style={{ flexDirection: "row" }}>
-						<IconButton
-							icon={
-								<Feather name="search" size={24} color="#fff" />
-							}
-							onPress={() => console.log("Search")}
-							style={{ marginHorizontal: "6%" }}
-						/>
-						<IconButton
-							icon={
-								<FontAwesome
-									name="exchange"
-									size={24}
-									color="#fff"
-								/>
-							}
-							onPress={() => console.log("Transfer")}
-							style={{ marginHorizontal: "4%" }}
-						/>
-						<IconButton
-							icon={
-								<Feather
-									name="more-vertical"
-									size={24}
-									color="#fff"
-								/>
-							}
-							onPress={() =>
-								navigation.getParent("RightDrawer").openDrawer()
-							}
-							style={{ marginHorizontal: "4%" }}
-						/>
-					</View>
-				),
+				headerShown: false
 			}}
 		>
-			<Stack.Screen name="Home" component={Home} />
-		</Stack.Navigator>
+			<HomeStackNav.Screen name="OutterDrawer" component={OutterDrawerScreen} />
+			{/* <HomeStackNav.Screen name="Home" component={Home} /> */}
+		</HomeStackNav.Navigator>
 	);
 }
 
-const LeftDrawer = createDrawerNavigator();
+const InnerDrawer = createDrawerNavigator();
 
-function LeftDrawerScreen() {
+function InnerDrawerScreen({ navigation }) {
 	return (
-		<LeftDrawer.Navigator
-			id="LeftDrawer"
+		<InnerDrawer.Navigator
+			id="InnerDrawer"
+			// screenOptions={{
+			// 	drawerPosition: "left",
+			// 	headerShown: false,
+			// 	drawerStyle: {
+			// 		backgroundColor: colors.background,
+			// 	},
+			// 	drawerLabelStyle: {
+			// 		color: "#333",
+			// 	},
+			// }}
 			screenOptions={{
 				drawerPosition: "left",
-				headerShown: false,
 				drawerStyle: {
 					backgroundColor: colors.background,
 				},
 				drawerLabelStyle: {
 					color: "#333",
 				},
+				headerShown: false,
+
+
 			}}
-			drawerContent={(props) => <LeftDrawerContent {...props} />}
+			drawerContent={(props) => <InnerDrawerContent {...props} />}
 		>
-			<LeftDrawer.Screen name="HomeStack" component={HomeStack} />
-		</LeftDrawer.Navigator>
+			<InnerDrawer.Screen
+				options={{
+					headerShown: true,
+					headerStyle: {
+						backgroundColor: colors.primary,
+					},
+					headerTintColor: "#fff",
+					headerTitle: "ExpenseX",
+					headerRightContainerStyle: {
+						paddingEnd: "2%",
+					},
+					headerLeft: () => (
+						<View style={{ flexDirection: "row", marginStart: "6%" }}>
+							<IconButton
+								icon={
+									<Feather name="filter" size={24} color="#fff" />
+								}
+								onPress={() =>
+									navigation.getParent().openDrawer()
+								}
+								style={{ marginHorizontal: "6%" }}
+							/>
+						</View>
+					),
+					headerRight: () => (
+						<View style={{ flexDirection: "row" }}>
+							<IconButton
+								icon={
+									<Feather name="search" size={24} color="#fff" />
+								}
+								onPress={() => console.log("Search")}
+								style={{ marginHorizontal: "6%" }}
+							/>
+							<IconButton
+								icon={
+									<FontAwesome
+										name="exchange"
+										size={24}
+										color="#fff"
+									/>
+								}
+								onPress={() => console.log("Transfer")}
+								style={{ marginHorizontal: "4%" }}
+							/>
+							<IconButton
+								icon={
+									<Feather
+										name="more-vertical"
+										size={24}
+										color="#fff"
+									/>
+								}
+								onPress={() =>
+									navigation.openDrawer()
+								}
+								style={{ marginHorizontal: "4%" }}
+							/>
+						</View>
+					),
+				}}
+				name="Home"
+				component={Home}
+			/>
+		</InnerDrawer.Navigator>
 	);
 }
 
-function LeftDrawerContent() {
+function InnerDrawerContent() {
 	return (
 		<View
 			style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
@@ -119,27 +139,27 @@ function LeftDrawerContent() {
 		</View>
 	);
 }
-const RightDrawer = createDrawerNavigator();
+const OutterDrawer = createDrawerNavigator();
 
-function RightDrawerScreen() {
+function OutterDrawerScreen() {
 	return (
-		<RightDrawer.Navigator
-			id="RightDrawer"
+		<OutterDrawer.Navigator
+			id="OutterDrawer"
 			screenOptions={{
 				drawerPosition: "right",
 				headerShown: false,
 			}}
-			drawerContent={(props) => <RightDrawerContent {...props} />}
+			drawerContent={(props) => <OutterDrawerContent {...props} />}
 		>
-			<RightDrawer.Screen
-				name="LeftDrawer"
-				component={LeftDrawerScreen}
+			<OutterDrawer.Screen
+				name="InnerDrawer"
+				component={InnerDrawerScreen}
 			/>
-		</RightDrawer.Navigator>
+		</OutterDrawer.Navigator>
 	);
 }
 
-function RightDrawerContent() {
+function OutterDrawerContent() {
 	return (
 		<View
 			style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
@@ -157,12 +177,22 @@ const MyTheme = {
 	},
 };
 
+const RootStack = createStackNavigator();
+
 const RootNavigation = () => {
 	return (
 		<NavigationContainer theme={MyTheme}>
 			<Provider>
 				<StatusBar style="auto" />
-				<RightDrawerScreen />
+				<RootStack.Navigator
+					initialRouteName="HomeStack"
+					screenOptions={{
+						headerShown: false,
+					}}
+				>
+					<RootStack.Screen name="ExpenseEntry" component={ExpenseEntry} />
+					<RootStack.Screen name="HomeStack" component={HomeStack} />
+				</RootStack.Navigator>
 			</Provider>
 		</NavigationContainer>
 	);
